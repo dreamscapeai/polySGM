@@ -41,13 +41,18 @@ main_output = widgets.Output()
 save_button = widgets.Button(description="Save")
 save_button.add_class("save-button")
 
+skip_button = widgets.Button(description="Skip")
+skip_button.add_class("skip-button")
+
 input_box = widgets.Text(placeholder='Enter Your Civitai API KEY Here')
 input_box.add_class("api-input")
 
-input_widget = widgets.VBox([input_box, save_button],
+token_info = widgets.HTML(value='To create a token, follow this tutorial: <a href="https://example.com/tutorial" target="_blank">Create Civitai API Token</a>')
+
+input_widget = widgets.VBox([input_box, widgets.HBox([save_button, skip_button]), token_info],
                             layout=widgets.Layout(
                                 width='450px',
-                                height='150px',
+                                height='200px',
                                 display='flex',
                                 flex_flow='column',
                                 align_items='center',
@@ -114,7 +119,7 @@ def key_inject(api_key):
             file.write(value)
 
 def key_widget():
-    def column(b):
+    def save_key(b):
         api_key = input_box.value.strip()
 
         with main_output:
@@ -138,7 +143,15 @@ def key_widget():
         with main_output:
             conda_install()
 
-    save_button.on_click(column)
+    def skip_key(b):
+        input_widget.close()
+        main_output.clear_output()
+
+        with main_output:
+            conda_install()
+
+    save_button.on_click(save_key)
+    skip_button.on_click(skip_key)
 
 def key_check():
     if key_file.exists():
